@@ -136,7 +136,7 @@ export const LoginView: React.FC<LoginViewProps> = ({ onLogin, isLoading, error 
         </div>
 
         <p className="text-center text-slate-500 text-[11px] mt-6">
-          Connected to isolated Odoo backend: <span className="font-mono text-slate-400">127.0.0.1:8099</span>
+          SUBSCRIBO Cloud SaaS Platform • Powered by Odoo Billing Automation Engine
         </p>
       </div>
     </div>
