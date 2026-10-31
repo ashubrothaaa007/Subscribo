@@ -5,6 +5,7 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-7.0-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.3-38B2AC?logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
 [![Tests](https://img.shields.io/badge/Tests-70%2F70_Passing-emerald)](docs/requirement_traceability.md)
+[![Live Demo](https://img.shields.io/badge/Live_Demo-trysubscribo.vercel.app-000000?logo=vercel&logoColor=white)](https://trysubscribo.vercel.app)
 
 **SUBSCRIBO** is an enterprise-grade subscription management and recurring billing platform. It unites an **Odoo 19 Community** enterprise backend engine with a high-performance, independent **React 19 + TypeScript** SaaS web application.
 
@@ -144,3 +145,4 @@ The React SaaS interface will be available at `http://localhost:5173`.
 ## 🔒 License & Intellectual Property
 
 Proprietary software developed for enterprise subscription management. All rights reserved.
+
