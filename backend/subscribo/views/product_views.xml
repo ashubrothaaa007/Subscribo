@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="product_template_form_view_subscribo_notes" model="ir.ui.view">
+        <field name="name">product.template.form.subscribo.notes</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page name="subscribo_notes" string="SUBSCRIBO Notes"
+                      groups="subscribo.group_subscribo_admin,subscribo.group_subscribo_staff">
+                    <field name="subscribo_notes" placeholder="Internal product notes..."/>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

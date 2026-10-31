@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_subscribo_products" model="ir.actions.act_window">
+        <field name="name">Products</field>
+        <field name="res_model">product.template</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{'default_sale_ok': True}</field>
+    </record>
+
+    <record id="action_subscribo_variants" model="ir.actions.act_window">
+        <field name="name">Product Variants</field>
+        <field name="res_model">product.product</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="action_subscribo_quotations" model="ir.actions.act_window">
+        <field name="name">Subscription Quotations</field>
+        <field name="res_model">sale.order</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('subscribo_is_subscription', '=', True)]</field>
+        <field name="context">{'default_subscribo_is_subscription': True}</field>
+    </record>
+
+    <record id="action_subscribo_invoices" model="ir.actions.act_window">
+        <field name="name">Subscription Invoices</field>
+        <field name="res_model">account.move</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('subscribo_subscription_id', '!=', False)]</field>
+        <field name="context">{'default_move_type': 'out_invoice', 'default_subscribo_is_recurring': True}</field>
+    </record>
+
+    <menuitem id="menu_subscribo_root" name="SUBSCRIBO" sequence="35"
+              groups="group_subscribo_admin,group_subscribo_staff"/>
+    <menuitem id="menu_subscribo_catalog" name="Catalog" parent="menu_subscribo_root"
+              sequence="10" groups="group_subscribo_admin,group_subscribo_staff"/>
+    <menuitem id="menu_subscribo_products" name="Products" parent="menu_subscribo_catalog"
+              action="action_subscribo_products" sequence="10"
+              groups="group_subscribo_admin,group_subscribo_staff"/>
+    <menuitem id="menu_subscribo_variants" name="Product Variants" parent="menu_subscribo_catalog"
+              action="action_subscribo_variants" sequence="20"
+              groups="group_subscribo_admin,group_subscribo_staff"/>
+    <menuitem id="menu_subscribo_plans" name="Subscription Plans" parent="menu_subscribo_root"
+              action="action_subscribo_plans" sequence="20"
+              groups="group_subscribo_admin,group_subscribo_staff"/>
+    <menuitem id="menu_subscribo_subscriptions" name="Subscriptions" parent="menu_subscribo_root"
+              action="action_subscribo_subscriptions" sequence="30"
+              groups="group_subscribo_admin,group_subscribo_staff"/>
+    <menuitem id="menu_subscribo_quotations" name="Quotations" parent="menu_subscribo_root"
+              action="action_subscribo_quotations" sequence="40"
+              groups="group_subscribo_admin,group_subscribo_staff"/>
+    <menuitem id="menu_subscribo_invoices" name="Invoices" parent="menu_subscribo_root"
+              action="action_subscribo_invoices" sequence="50"
+              groups="group_subscribo_admin,group_subscribo_staff"/>
+    <menuitem id="menu_subscribo_new_quotation" name="New Subscription Quotation" parent="menu_subscribo_root"
+              action="action_subscribo_quote_wizard" sequence="55"
+              groups="group_subscribo_admin,group_subscribo_staff"/>
+</odoo>

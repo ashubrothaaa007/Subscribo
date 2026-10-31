@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="portal_my_subscriptions" name="My SUBSCRIBO Subscriptions">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="portal.portal_table">
+                <thead>
+                    <tr><th>Subscription</th><th>Plan</th><th>Status</th><th>Start</th><th>Expiry</th></tr>
+                </thead>
+                <tbody>
+                    <tr t-foreach="subscriptions" t-as="subscription">
+                        <td><a t-att-href="'/my/subscriptions/%s' % subscription.id"><span t-field="subscription.name"/></a></td>
+                        <td><span t-field="subscription.plan_id.name"/></td>
+                        <td><span t-field="subscription.state"/></td>
+                        <td><span t-field="subscription.start_date"/></td>
+                        <td><span t-field="subscription.expiry_date"/></td>
+                    </tr>
+                </tbody>
+            </t>
+        </t>
+    </template>
+
+    <template id="portal_subscription_page" name="SUBSCRIBO Subscription">
+        <t t-call="portal.portal_layout">
+            <div class="container">
+                <h2><span t-field="subscription.name"/></h2>
+                <p>Plan: <span t-field="subscription.plan_id.name"/></p>
+                <p>Status: <span t-field="subscription.state"/></p>
+                <p>Quantity: <span t-field="subscription.quantity"/></p>
+                <p>Start: <span t-field="subscription.start_date"/> — Expiry: <span t-field="subscription.expiry_date"/></p>
+                <p t-if="subscription.is_paused">Subscription paused</p>
+                <h3>Add-ons</h3>
+                <table class="table">
+                    <thead><tr><th>Product</th><th>Quantity</th><th>Enabled</th><th>Action</th></tr></thead>
+                    <tbody>
+                        <tr t-foreach="subscription.addon_ids" t-as="addon">
+                            <td><span t-field="addon.product_id.name"/></td>
+                            <td><span t-field="addon.quantity"/></td>
+                            <td><span t-field="addon.enabled"/></td>
+                            <td>
+                                <form t-if="addon.enabled" t-att-action="'/my/subscriptions/%s/action/addon_disable' % subscription.id" method="post">
+                                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                    <input type="hidden" name="addon_id" t-att-value="addon.id"/>
+                                    <button class="btn btn-secondary" type="submit">Switch off</button>
+                                </form>
+                                <t t-else="">
+                                    <a t-if="addon.pending_order_id and addon.pending_order_id.state in ['draft', 'sent']"
+                                       t-att-href="addon.pending_order_id.get_portal_url()"
+                                       class="btn btn-warning">Review Quote</a>
+                                    <form t-else="" t-att-action="'/my/subscriptions/%s/action/addon_enable' % subscription.id" method="post">
+                                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                        <input type="hidden" name="addon_id" t-att-value="addon.id"/>
+                                        <button class="btn btn-primary" type="submit">Request Add-on</button>
+                                    </form>
+                                </t>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="d-flex gap-2">
+                    <form t-if="subscription.state == 'active' and not subscription.is_paused" t-att-action="'/my/subscriptions/%s/action/pause' % subscription.id" method="post">
+                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                        <button class="btn btn-secondary" type="submit">Pause</button>
+                    </form>
+                    <form t-if="subscription.state == 'active' and subscription.is_paused" t-att-action="'/my/subscriptions/%s/action/resume' % subscription.id" method="post">
+                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                        <button class="btn btn-primary" type="submit">Resume</button>
+                    </form>
+                    <form t-if="subscription.state in ['confirmed', 'active']" t-att-action="'/my/subscriptions/%s/action/close' % subscription.id" method="post">
+                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                        <button class="btn btn-danger" type="submit">Close</button>
+                    </form>
+                    <form t-if="subscription.state in ['active', 'closed'] and not subscription.is_paused and subscription.plan_id.allow_renewal"
+                          t-att-action="'/my/subscriptions/%s/action/renew' % subscription.id" method="post" class="d-flex gap-2">
+                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                        <label>Renewal start <input type="date" name="start_date" required="required"/></label>
+                        <label>Renewal expiry <input type="date" name="expiry_date" required="required"/></label>
+                        <button class="btn btn-primary" type="submit">Request renewal</button>
+                    </form>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <template id="portal_my_home_subscribo" inherit_id="portal.portal_my_home" priority="35">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+            <t t-if="request.env.user.has_group('subscribo.group_subscribo_customer')">
+                <a class="list-group-item list-group-item-action" href="/my/subscriptions">My Subscriptions</a>
+            </t>
+        </xpath>
+    </template>
+</odoo>

@@ -1,0 +1,21 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_subscribo_plan_staff,subscribo.plan staff,model_subscribo_plan,group_subscribo_staff,1,0,0,0
+access_subscribo_plan_admin,subscribo.plan admin,model_subscribo_plan,group_subscribo_admin,1,1,1,1
+access_subscribo_subscription_staff,subscribo.subscription staff,model_subscribo_subscription,group_subscribo_staff,1,1,0,0
+access_subscribo_subscription_admin,subscribo.subscription admin,model_subscribo_subscription,group_subscribo_admin,1,1,1,1
+access_subscribo_subscription_customer,subscribo.subscription customer,model_subscribo_subscription,group_subscribo_customer,1,0,0,0
+access_subscribo_subscription_event_staff,subscribo.subscription.event staff,model_subscribo_subscription_event,group_subscribo_staff,1,0,0,0
+access_subscribo_subscription_event_admin,subscribo.subscription.event admin,model_subscribo_subscription_event,group_subscribo_admin,1,0,0,0
+access_subscribo_sale_order_staff,sale.order SUBSCRIBO staff,sale.model_sale_order,group_subscribo_staff,1,1,1,0
+access_subscribo_sale_order_admin,sale.order SUBSCRIBO admin,sale.model_sale_order,group_subscribo_admin,1,1,1,1
+access_subscribo_sale_order_line_staff,sale.order.line SUBSCRIBO staff,sale.model_sale_order_line,group_subscribo_staff,1,1,1,0
+access_subscribo_sale_order_line_admin,sale.order.line SUBSCRIBO admin,sale.model_sale_order_line,group_subscribo_admin,1,1,1,1
+access_subscribo_quote_wizard_staff,subscription quote wizard staff,model_subscribo_quote_wizard,group_subscribo_staff,1,1,1,1
+access_subscribo_renewal_wizard_staff,subscription renewal wizard staff,model_subscribo_renewal_wizard,group_subscribo_staff,1,1,1,1
+access_subscribo_subscription_addon_staff,subscription addon staff,model_subscribo_subscription_addon,group_subscribo_staff,1,0,0,0
+access_subscribo_subscription_addon_admin,subscription addon admin,model_subscribo_subscription_addon,group_subscribo_admin,1,0,0,0
+access_subscribo_subscription_addon_customer,subscription addon customer,model_subscribo_subscription_addon,group_subscribo_customer,1,0,0,0
+access_subscribo_account_move_staff,account.move SUBSCRIBO staff,account.model_account_move,group_subscribo_staff,1,1,1,0
+access_subscribo_account_move_line_staff,account.move.line SUBSCRIBO staff,account.model_account_move_line,group_subscribo_staff,1,1,1,0
+access_subscribo_account_move_admin,account.move SUBSCRIBO admin,account.model_account_move,group_subscribo_admin,1,1,1,1
+access_subscribo_account_move_line_admin,account.move.line SUBSCRIBO admin,account.model_account_move_line,group_subscribo_admin,1,1,1,1

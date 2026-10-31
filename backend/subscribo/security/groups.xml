@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="module_category_subscribo" model="ir.module.category">
+        <field name="name">SUBSCRIBO</field>
+        <field name="sequence">35</field>
+    </record>
+
+    <record id="privilege_subscribo_roles" model="res.groups.privilege">
+        <field name="name">Subscription Management</field>
+        <field name="description">Access roles for the SUBSCRIBO application.</field>
+        <field name="category_id" ref="module_category_subscribo"/>
+        <field name="sequence">1</field>
+    </record>
+
+    <record id="group_subscribo_staff" model="res.groups">
+        <field name="name">SUBSCRIBO Staff</field>
+        <field name="comment">Day-to-day SUBSCRIBO access with limited configuration rights.</field>
+        <field name="privilege_id" ref="privilege_subscribo_roles"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+
+    <record id="group_subscribo_admin" model="res.groups">
+        <field name="name">SUBSCRIBO Administrator</field>
+        <field name="comment">Manage SUBSCRIBO configuration, catalog, plans, and staff membership.</field>
+        <field name="privilege_id" ref="privilege_subscribo_roles"/>
+        <field name="implied_ids" eval="[(4, ref('group_subscribo_staff')), (4, ref('base.group_system')), (4, ref('product.group_product_manager'))]"/>
+    </record>
+
+    <record id="group_subscribo_customer" model="res.groups">
+        <field name="name">SUBSCRIBO Customer</field>
+        <field name="comment">Customer role for SUBSCRIBO self-service accounts.</field>
+        <field name="privilege_id" ref="privilege_subscribo_roles"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_portal'))]"/>
+    </record>
+
+    <!-- Bootstrap the installed database administrator as the first app admin. -->
+    <record id="base.user_admin" model="res.users">
+        <field name="group_ids" eval="[(4, ref('group_subscribo_admin'))]"/>
+    </record>
+</odoo>

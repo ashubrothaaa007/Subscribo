@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_order_form_subscribo" model="ir.ui.view">
+        <field name="name">sale.order.form.subscribo</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="subscribo_is_subscription" invisible="1"/>
+                <field name="subscribo_plan_id" invisible="not subscribo_is_subscription"
+                       readonly="state != 'draft'" options="{'no_create': True}"/>
+                <field name="subscribo_quantity" invisible="not subscribo_is_subscription"
+                       readonly="state != 'draft'"/>
+                <field name="subscribo_start_date" invisible="not subscribo_is_subscription"
+                       readonly="state != 'draft'"/>
+                <field name="subscribo_expiry_date" invisible="not subscribo_is_subscription"
+                       readonly="state != 'draft'"/>
+                <field name="subscribo_subscription_id" invisible="not subscribo_is_subscription" readonly="1"/>
+            </xpath>
+            <xpath expr="//field[@name='order_line']/list/field[@name='product_id']" position="after">
+                <field name="subscribo_plan_line" column_invisible="True"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

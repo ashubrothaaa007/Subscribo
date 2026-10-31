@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_subscribo_quote_wizard_form" model="ir.ui.view">
+        <field name="name">subscribo.quote.wizard.form</field>
+        <field name="model">subscribo.quote.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Create Subscription Quotation">
+                <group>
+                    <group>
+                        <field name="partner_id" options="{'no_create': True}"/>
+                        <field name="company_id" groups="base.group_multi_company"/>
+                        <field name="plan_id" options="{'no_create': True}"/>
+                        <field name="quantity"/>
+                    </group>
+                    <group>
+                        <field name="template_id" options="{'no_create': True}"/>
+                        <field name="start_date"/>
+                        <field name="expiry_date"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="action_create_quotation" type="object" string="Create Quotation" class="btn-primary"/>
+                    <button string="Cancel" special="cancel" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_subscribo_quote_wizard" model="ir.actions.act_window">
+        <field name="name">New Subscription Quotation</field>
+        <field name="res_model">subscribo.quote.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_subscribo_quote_wizard_form"/>
+        <field name="target">new</field>
+    </record>
+</odoo>

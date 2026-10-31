@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="ir_cron_subscribo_auto_close" model="ir.cron">
+        <field name="name">SUBSCRIBO: close expired subscriptions</field>
+        <field name="model_id" ref="model_subscribo_subscription"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_close_expired_subscriptions()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="active" eval="True"/>
+    </record>
+
+    <record id="ir_cron_subscribo_recurring_invoicing" model="ir.cron">
+        <field name="name">SUBSCRIBO: generate recurring subscription invoices</field>
+        <field name="model_id" ref="model_subscribo_subscription"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_recurring_invoicing()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="active" eval="True"/>
+    </record>
+</odoo>

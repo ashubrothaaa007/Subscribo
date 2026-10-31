@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="rule_subscribo_subscription_staff" model="ir.rule">
+        <field name="name">SUBSCRIBO Staff: subscriptions in allowed companies</field>
+        <field name="model_id" ref="model_subscribo_subscription"/>
+        <field name="groups" eval="[(4, ref('group_subscribo_staff'))]"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_subscribo_subscription_admin" model="ir.rule">
+        <field name="name">SUBSCRIBO Admin: all subscriptions</field>
+        <field name="model_id" ref="model_subscribo_subscription"/>
+        <field name="groups" eval="[(4, ref('group_subscribo_admin'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+    <record id="rule_subscribo_subscription_customer" model="ir.rule">
+        <field name="name">SUBSCRIBO Customer: own subscriptions only</field>
+        <field name="model_id" ref="model_subscribo_subscription"/>
+        <field name="groups" eval="[(4, ref('group_subscribo_customer'))]"/>
+        <field name="domain_force">[('partner_id', 'child_of', [user.partner_id.commercial_partner_id.id])]</field>
+    </record>
+    <record id="rule_subscribo_subscription_event_staff" model="ir.rule">
+        <field name="name">SUBSCRIBO Staff: subscription events in allowed companies</field>
+        <field name="model_id" ref="model_subscribo_subscription_event"/>
+        <field name="groups" eval="[(4, ref('group_subscribo_staff'))]"/>
+        <field name="domain_force">[('subscription_id.company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_subscribo_subscription_event_admin" model="ir.rule">
+        <field name="name">SUBSCRIBO Admin: all subscription events</field>
+        <field name="model_id" ref="model_subscribo_subscription_event"/>
+        <field name="groups" eval="[(4, ref('group_subscribo_admin'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+    <record id="rule_subscribo_sale_order_staff" model="ir.rule">
+        <field name="name">SUBSCRIBO Staff: subscription quotations only</field>
+        <field name="model_id" ref="sale.model_sale_order"/>
+        <field name="groups" eval="[(4, ref('group_subscribo_staff'))]"/>
+        <field name="domain_force">[('subscribo_is_subscription', '=', True), ('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_subscribo_sale_order_admin" model="ir.rule">
+        <field name="name">SUBSCRIBO Admin: all sales orders in allowed companies</field>
+        <field name="model_id" ref="sale.model_sale_order"/>
+        <field name="groups" eval="[(4, ref('group_subscribo_admin'))]"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_subscribo_sale_order_line_staff" model="ir.rule">
+        <field name="name">SUBSCRIBO Staff: subscription quotation lines only</field>
+        <field name="model_id" ref="sale.model_sale_order_line"/>
+        <field name="groups" eval="[(4, ref('group_subscribo_staff'))]"/>
+        <field name="domain_force">[('order_id.subscribo_is_subscription', '=', True), ('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_subscribo_sale_order_line_admin" model="ir.rule">
+        <field name="name">SUBSCRIBO Admin: all sales order lines in allowed companies</field>
+        <field name="model_id" ref="sale.model_sale_order_line"/>
+        <field name="groups" eval="[(4, ref('group_subscribo_admin'))]"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_subscribo_subscription_addon_staff" model="ir.rule">
+        <field name="name">SUBSCRIBO Staff: subscription add-ons in allowed companies</field>
+        <field name="model_id" ref="model_subscribo_subscription_addon"/>
+        <field name="groups" eval="[(4, ref('group_subscribo_staff'))]"/>
+        <field name="domain_force">[('subscription_id.company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_subscribo_subscription_addon_admin" model="ir.rule">
+        <field name="name">SUBSCRIBO Admin: all subscription add-ons</field>
+        <field name="model_id" ref="model_subscribo_subscription_addon"/>
+        <field name="groups" eval="[(4, ref('group_subscribo_admin'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+    <record id="rule_subscribo_subscription_addon_customer" model="ir.rule">
+        <field name="name">SUBSCRIBO Customer: own subscription add-ons only</field>
+        <field name="model_id" ref="model_subscribo_subscription_addon"/>
+        <field name="groups" eval="[(4, ref('group_subscribo_customer'))]"/>
+        <field name="domain_force">[('subscription_id.partner_id', 'child_of', [user.partner_id.commercial_partner_id.id])]</field>
+    </record>
+    <record id="rule_subscribo_account_move_staff" model="ir.rule">
+        <field name="name">SUBSCRIBO Staff: subscription invoices in allowed companies</field>
+        <field name="model_id" ref="account.model_account_move"/>
+        <field name="groups" eval="[(4, ref('group_subscribo_staff'))]"/>
+        <field name="domain_force">[('subscribo_subscription_id', '!=', False), ('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_subscribo_account_move_admin" model="ir.rule">
+        <field name="name">SUBSCRIBO Admin: all invoices in allowed companies</field>
+        <field name="model_id" ref="account.model_account_move"/>
+        <field name="groups" eval="[(4, ref('group_subscribo_admin'))]"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_subscribo_account_move_customer" model="ir.rule">
+        <field name="name">SUBSCRIBO Customer: own subscription invoices only</field>
+        <field name="model_id" ref="account.model_account_move"/>
+        <field name="groups" eval="[(4, ref('group_subscribo_customer'))]"/>
+        <field name="domain_force">[('partner_id', 'child_of', [user.partner_id.commercial_partner_id.id])]</field>
+    </record>
+</odoo>

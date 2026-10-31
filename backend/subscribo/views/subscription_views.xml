@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_subscribo_subscription_list" model="ir.ui.view">
+        <field name="name">subscribo.subscription.list</field>
+        <field name="model">subscribo.subscription</field>
+        <field name="arch" type="xml">
+            <list string="Subscriptions" decoration-muted="state == 'closed'">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="plan_id"/>
+                <field name="start_date"/>
+                <field name="expiry_date"/>
+                <field name="next_invoice_date"/>
+                <field name="state" widget="badge"/>
+                <field name="billing_status" widget="badge"/>
+                <field name="is_paused" widget="boolean_toggle"/>
+                <field name="amount_total" sum="Total"/>
+                <field name="currency_id" column_invisible="True"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_subscribo_subscription_search" model="ir.ui.view">
+        <field name="name">subscribo.subscription.search</field>
+        <field name="model">subscribo.subscription</field>
+        <field name="arch" type="xml">
+            <search string="Subscriptions">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="plan_id"/>
+                <filter name="draft" string="Draft" domain="[('state', '=', 'draft')]"/>
+                <filter name="quotation" string="Quotation" domain="[('state', '=', 'quotation')]"/>
+                <filter name="confirmed" string="Confirmed" domain="[('state', '=', 'confirmed')]"/>
+                <filter name="active" string="Active" domain="[('state', '=', 'active')]"/>
+                <filter name="closed" string="Closed" domain="[('state', '=', 'closed')]"/>
+                <filter name="paused" string="Paused" domain="[('is_paused', '=', True)]"/>
+                <separator/>
+                <filter name="to_invoice" string="To Invoice" domain="[('billing_status', '=', 'to_invoice')]"/>
+                <filter name="invoiced" string="Invoiced" domain="[('billing_status', '=', 'invoiced')]"/>
+                <group>
+                    <filter name="group_by_state" string="Status" context="{'group_by': 'state'}"/>
+                    <filter name="group_by_plan" string="Plan" context="{'group_by': 'plan_id'}"/>
+                    <filter name="group_by_billing_status" string="Billing Status" context="{'group_by': 'billing_status'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_subscribo_subscription_form" model="ir.ui.view">
+        <field name="name">subscribo.subscription.form</field>
+        <field name="model">subscribo.subscription</field>
+        <field name="arch" type="xml">
+            <form string="Subscription">
+                <header>
+                    <button name="action_activate" type="object" string="Activate"
+                            class="btn-primary" groups="subscribo.group_subscribo_admin,subscribo.group_subscribo_staff"
+                            invisible="state != 'confirmed' or is_paused"/>
+                    <button name="action_generate_invoice" type="object" string="Generate Invoice"
+                            class="btn-primary" groups="subscribo.group_subscribo_admin,subscribo.group_subscribo_staff"
+                            invisible="state != 'active' or is_paused"/>
+                    <button name="action_pause" type="object" string="Pause"
+                            groups="subscribo.group_subscribo_admin,subscribo.group_subscribo_staff"
+                            invisible="state != 'active' or is_paused or not plan_id.allow_pause"/>
+                    <button name="action_resume" type="object" string="Resume"
+                            groups="subscribo.group_subscribo_admin,subscribo.group_subscribo_staff"
+                            invisible="state != 'active' or not is_paused"/>
+                    <button name="action_close" type="object" string="Close"
+                            groups="subscribo.group_subscribo_admin,subscribo.group_subscribo_staff"
+                            invisible="state not in ['confirmed', 'active']"/>
+                    <button name="action_open_renewal_wizard" type="object" string="Create Renewal Quotation"
+                            groups="subscribo.group_subscribo_admin,subscribo.group_subscribo_staff"
+                            invisible="state not in ['active', 'closed'] or is_paused"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,quotation,confirmed,active,closed"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_invoices" type="object" class="oe_stat_button"
+                                icon="fa-pencil-square-o"
+                                groups="subscribo.group_subscribo_admin,subscribo.group_subscribo_staff">
+                            <field name="invoice_count" widget="statinfo" string="Invoices"/>
+                        </button>
+                        <button name="action_open_quotation" type="object" class="oe_stat_button"
+                                icon="fa-file-text-o" string="Quotation"
+                                groups="subscribo.group_subscribo_admin,subscribo.group_subscribo_staff"/>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group string="Subscription">
+                            <field name="partner_id"/>
+                            <field name="plan_id"/>
+                            <field name="quantity"/>
+                            <field name="start_date"/>
+                            <field name="expiry_date"/>
+                            <field name="payment_term_id"/>
+                        </group>
+                        <group string="Billing &amp; Commercial Summary">
+                            <field name="billing_status" widget="badge"/>
+                            <field name="next_invoice_date"/>
+                            <field name="last_invoice_date"/>
+                            <field name="billing_period_start"/>
+                            <field name="billing_period_end"/>
+                            <field name="sale_order_id"/>
+                            <field name="is_paused"/>
+                            <field name="pause_started_at" invisible="not is_paused"/>
+                            <field name="renewed_from_id"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="amount_untaxed" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                            <field name="amount_tax" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                            <field name="amount_total" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Quotation Lines">
+                            <field name="order_line_ids" readonly="1">
+                                <list create="0" edit="0" delete="0">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="product_id"/>
+                                    <field name="name"/>
+                                    <field name="product_uom_qty"/>
+                                    <field name="product_uom_id"/>
+                                    <field name="price_unit"/>
+                                    <field name="tax_ids" widget="many2many_tags"/>
+                                    <field name="price_subtotal"/>
+                                    <field name="currency_id" column_invisible="True"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Invoices" groups="subscribo.group_subscribo_admin,subscribo.group_subscribo_staff">
+                            <field name="invoice_ids" readonly="1">
+                                <list create="0" edit="0" delete="0">
+                                    <field name="name"/>
+                                    <field name="invoice_date"/>
+                                    <field name="invoice_date_due"/>
+                                    <field name="subscribo_billing_start"/>
+                                    <field name="subscribo_billing_end"/>
+                                    <field name="amount_total" sum="Total"/>
+                                    <field name="state" widget="badge"/>
+                                    <field name="payment_state" widget="badge"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Audit History">
+                            <field name="event_ids" readonly="1">
+                                <list create="0" edit="0" delete="0">
+                                    <field name="event_date"/>
+                                    <field name="event_type"/>
+                                    <field name="user_id"/>
+                                    <field name="details" optional="hide"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Add-ons">
+                            <field name="addon_ids" readonly="1">
+                                <list create="0" edit="0" delete="0">
+                                    <field name="product_id"/>
+                                    <field name="quantity"/>
+                                    <field name="enabled"/>
+                                    <field name="is_active" widget="boolean"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Renewals">
+                            <field name="renewal_ids" readonly="1">
+                                <list create="0" edit="0" delete="0">
+                                    <field name="name"/>
+                                    <field name="start_date"/>
+                                    <field name="expiry_date"/>
+                                    <field name="state"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_subscribo_subscriptions" model="ir.actions.act_window">
+        <field name="name">Subscriptions</field>
+        <field name="res_model">subscribo.subscription</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_subscribo_subscription_search"/>
+    </record>
+</odoo>
